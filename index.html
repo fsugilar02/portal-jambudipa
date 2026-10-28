@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Resmi Desa Jambudipa - Kec. Warungkondang, Kab. Cianjur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      color: #1e293b;
+    }
+    .wrapper-portal {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR KIRI */
+    .sidebar-portal {
+      width: 280px;
+      background: linear-gradient(180deg, #0f3b61 0%, #09253e 100%);
+      color: white;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1050;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px;
+      overflow-y: auto;
+      transition: transform 0.3s ease-in-out;
+    }
+    .sidebar-brand {
+      text-align: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+      flex-grow: 1;
+    }
+    .sidebar-menu li {
+      margin-bottom: 4px;
+    }
+    .sidebar-menu .nav-item-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .sidebar-menu .nav-item-link:hover,
+    .sidebar-menu .nav-item-link.active {
+      background: rgba(255,255,255,0.16);
+      color: #ffffff;
+    }
+    .sidebar-menu .nav-item-link i.icon-left {
+      font-size: 18px;
+      margin-right: 12px;
+      color: #38bdf8;
+    }
+
+    /* Submenu Dropdown di Sidebar Kiri */
+    .submenu-list {
+      list-style: none;
+      padding-left: 14px;
+      margin-top: 4px;
+      margin-bottom: 6px;
+      border-left: 2px solid rgba(56, 189, 248, 0.35);
+      margin-left: 22px;
+    }
+    .submenu-list li .sub-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.78);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .submenu-list li .sub-link:hover,
+    .submenu-list li .sub-link.active-sub {
+      background: rgba(56, 189, 248, 0.22);
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .submenu-lkd-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #93c5fd !important;
+      font-size: 11.5px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 800 !important;
+      padding: 9px 12px !important;
+      margin-top: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .submenu-lkd-toggle:hover {
+      background: rgba(255,255,255,0.14);
+      color: #ffffff !important;
+    }
+    .submenu-nested {
+      list-style: none;
+      padding-left: 10px;
+      margin-top: 4px;
+      border-left: 1.5px dashed rgba(147, 197, 253, 0.4);
+      margin-left: 10px;
+    }
+
+    /* AREA KONTEN KANAN */
+    .content-portal {
+      margin-left: 280px;
+      flex-grow: 1;
+      padding: 28px;
+      width: calc(100% - 280px);
+    }
+
+    /* GAYA SLIDE FOTO KEGIATAN ALA MEDSOS */
+    .medsos-card {
+      background: #ffffff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+    }
+    .medsos-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .medsos-img-box {
+      width: 100%;
+      height: 360px;
+      background-color: #0f172a;
+      position: relative;
+      overflow: hidden;
+    }
+    .medsos-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .medsos-caption-box {
+      padding: 18px 22px;
+      background: #ffffff;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    /* Topbar Khusus Layar HP */
+    .mobile-topbar {
+      display: none;
+      background: #0f3b61;
+      color: white;
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 1040;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1045;
+    }
+
+    /* Kartu Statistik & Infrastruktur */
+    .stat-card-box {
+      color: white;
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .infra-card {
+      background: #1e293b;
+      color: white;
+      border-radius: 14px;
+      padding: 18px 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .infra-card .val { font-size: 1.55rem; font-weight: 800; margin-top: 5px; }
+    .infra-card .lbl { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
+
+    /* Kartu Pengurus / Profil Desa */
+    .card-pengurus {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+      height: 100%;
+    }
+    .card-pengurus:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+    .avatar-pengurus {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0284c7;
+      background: #e0f2fe;
+    }
+
+    @media (max-width: 991.98px) {
+      .sidebar-portal { transform: translateX(-100%); }
+      .sidebar-portal.show-sidebar { transform: translateX(0); }
+      .sidebar-backdrop.show-backdrop { display: block; }
+      .content-portal { margin-left: 0; width: 100%; padding: 16px; }
+      .mobile-topbar { display: flex; align-items: center; justify-content: space-between; }
+      .medsos-img-box { height: 250px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR MOBILE -->
+  <div class="mobile-topbar">
+    <div class="d-flex align-items-center gap-2">
+      <button type="button" class="btn btn-outline-light border-0 px-2 py-1" onclick="window.toggleMobileSidebar()">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Lambang_Kabupaten_Cianjur.svg" width="32">
+      <div class="lh-1">
+        <span class="fw-bold d-block" style="font-size: 14px;">DESA JAMBUDIPA</span>
+        <small class="text-info" style="font-size: 10px;">Kec. Warungkondang - Cianjur</small>
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-info text-dark fw-bold rounded-pill px-3" onclick="window.toggleMobileSidebar()">
+      Menu <i class="bi bi-chevron-down ms-1"></i>
+    </button>
+  </div>
+
+  <!-- BACKDROP MOBILE -->
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="window.toggleMobileSidebar()"></div>
+
+  <div class="wrapper-portal">
+    <!-- SIDEBAR KIRI -->
+    <aside id="sidebarPortal" class="sidebar-portal shadow">
+      <div class="sidebar-brand">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Lambang_Kabupaten_Cianjur.svg" width="56" class="mb-2">
+        <h6 class="fw-bold mb-0 text-uppercase" style="letter-spacing: 0.5px;">Desa Jambudipa</h6>
+        <small class="text-info d-block" style="font-size: 11.5px;">Kec. Warungkondang - Kab. Cianjur</small>
+      </div>
+
+      <ul class="sidebar-menu">
+        <!-- 1. BERANDA DESA -->
+        <li>
+          <div class="nav-item-link active" id="nav-beranda" onclick="window.bukaHalamanPublik('beranda')">
+            <span><i class="bi bi-house-door-fill icon-left"></i> Beranda Desa</span>
+          </div>
+        </li>
+
+        <!-- 2. INFOGRAFIS DATA DESA -->
+        <li>
+          <div class="nav-item-link" id="nav-infografis" onclick="window.bukaHalamanPublik('infografis')">
+            <span><i class="bi bi-bar-chart-line-fill icon-left"></i> Infografis Data Desa</span>
+          </div>
+        </li>
+
+        <!-- 3. PROFIL DESA (DENGAN SUB-DROPDOWN LEMBAGA KEMASYARAKATAN) -->
+        <li>
+          <div class="nav-item-link" id="nav-profil" onclick="window.toggleCollapseMenu('collapseProfilDesa', 'iconPanahProfil')">
+            <span><i class="bi bi-building-fill icon-left"></i> Profil Desa</span>
+            <i class="bi bi-chevron-right small" id="iconPanahProfil"></i>
+          </div>
+          <div class="collapse" id="collapseProfilDesa">
+            <ul class="submenu-list" id="sidebar-submenu-profil">
+              <li>
+                <div class="sub-link" onclick="window.bukaProfilKategori('Pemerintahan Desa', 'Pemerintahan Desa', this)">
+                  <span><i class="bi bi-bank2 me-2 text-info"></i>Pemerintahan Desa</span>
+                </div>
+              </li>
+              <li>
+                <div class="sub-link" onclick="window.bukaProfilKategori('BPD', 'BPD', this)">
+                  <span><i class="bi bi-people-fill me-2 text-info"></i>BPD</span>
+                </div>
+              </li>
+
+              <!-- DROPDOWN LEMBAGA KEMASYARAKATAN -->
+              <li>
+                <div class="sub-link submenu-lkd-toggle" onclick="window.toggleCollapseMenu('collapseLKD', 'iconPanahLKD')">
+                  <span><i class="bi bi-diagram-3-fill me-2"></i>Lembaga Kemasyarakatan</span>
+                  <i class="bi bi-chevron-right" id="iconPanahLKD"></i>
+                </div>
+                <div class="collapse" id="collapseLKD">
+                  <ul class="submenu-nested" id="daftar-submenu-lkd">
+                    <li><div class="sub-link" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'RT / RW', this)">• RT / RW</div></li>
+                    <li><div class="sub-link" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'TP-PKK', this)">• TP-PKK</div></li>
+                    <li><div class="sub-link" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'LPM', this)">• LPM</div></li>
+                    <li><div class="sub-link" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'SATLINMAS', this)">• SATLINMAS</div></li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- 4. PRODUK HUKUM DESA -->
+        <li>
+          <div class="nav-item-link" id="nav-hukum" onclick="window.bukaHalamanPublik('hukum')">
+            <span><i class="bi bi-journal-bookmark-fill icon-left"></i> Produk Hukum Desa</span>
+          </div>
+        </li>
+
+        <!-- 5. CEK KEASLIAN SURAT PUBLIK -->
+        <li>
+          <div class="nav-item-link" id="nav-ceksurat" onclick="window.bukaHalamanPublik('ceksurat')">
+            <span><i class="bi bi-patch-check-fill icon-left"></i> Cek Keaslian Surat</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="text-center mt-auto pt-3 border-top border-secondary text-light" style="font-size: 11px; opacity: 0.75;">
+        <span>Portal Resmi Desa Jambudipa</span><br>
+        <strong class="text-info">SugilarDev © 2026</strong>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA KANAN -->
+    <main class="content-portal">
+
+      <!-- ========================================================= -->
+      <!-- SECTION 1: BERANDA DESA (SLIDE KEGIATAN MEDSOS OTOMATIS)  -->
+      <!-- ========================================================= -->
+      <section id="sec-beranda" class="publik-section">
+        <!-- Hero Banner Atas -->
+        <div class="p-4 p-md-5 mb-4 text-white rounded-4 shadow-sm" style="background: linear-gradient(135deg, rgba(15, 59, 97, 0.92), rgba(9, 37, 62, 0.95)), url('https://lh3.googleusercontent.com/d/1gBDmjZAhAKRQbbETV5Ktj91MZ6p231nr') center/cover no-repeat;">
+          <span class="badge bg-info text-dark fw-bold mb-2 px-3 py-1 rounded-pill">WEBSITE RESMI PEMERINTAH DESA</span>
+          <h2 class="fw-bold mb-1" id="tampil-judul-sambutan">Selamat Datang di Portal Resmi Desa Jambudipa</h2>
+          <p class="mb-0 text-light" style="opacity: 0.9;">Kecamatan Warungkondang - Kabupaten Cianjur, Provinsi Jawa Barat</p>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <!-- Kolom Kiri (8 Kolom): Slide Otomatis Kegiatan Desa Bergaya Medsos -->
+          <div class="col-lg-8">
+            <div class="medsos-card h-100 d-flex flex-column justify-content-between">
+              <div class="medsos-header">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Lambang_Kabupaten_Cianjur.svg" width="34">
+                  <div>
+                    <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Kabar & Kegiatan Desa Jambudipa</h6>
+                    <small class="text-muted" style="font-size: 11.5px;"><i class="bi bi-geo-alt-fill text-danger me-1"></i>Kec. Warungkondang, Kab. Cianjur</small>
+                  </div>
+                </div>
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1">
+                  <i class="bi bi-camera-fill me-1"></i> Galeri Terkini
+                </span>
+              </div>
+
+              <!-- Carousel Bootstrap Otomatis -->
+              <div id="carouselKegiatanDesa" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+                <div class="carousel-inner" id="wadah-slide-kegiatan">
+                  <!-- Diisi otomatis oleh fungsi renderSlideKegiatanDesa() -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselKegiatanDesa" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon bg-dark bg-opacity-50 rounded-circle p-3" aria-hidden="true"></span>
+                  <span class="visually-hidden">Sebelumnya</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselKegiatanDesa" data-bs-slide="next">
+                  <span class="carousel-control-next-icon bg-dark bg-opacity-50 rounded-circle p-3" aria-hidden="true"></span>
+                  <span class="visually-hidden">Selanjutnya</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan (4 Kolom): Akses Cepat Informasi -->
+          <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+              <h6 class="fw-bold text-dark mb-3"><i class="bi bi-compass-fill text-primary me-2"></i> Akses Cepat Informasi</h6>
+              <div class="d-grid gap-2 mb-4">
+                <button type="button" class="btn btn-outline-primary text-start fw-bold rounded-3 py-2 px-3" onclick="window.bukaHalamanPublik('infografis')">
+                  <i class="bi bi-bar-chart-line-fill me-2"></i> Lihat Infografis Data Desa
+                </button>
+                <button type="button" class="btn btn-outline-primary text-start fw-bold rounded-3 py-2 px-3" onclick="window.bukaProfilKategori('Pemerintahan Desa', 'Pemerintahan Desa')">
+                  <i class="bi bi-people-fill me-2"></i> Struktur Pemerintahan Desa
+                </button>
+                <button type="button" class="btn btn-outline-primary text-start fw-bold rounded-3 py-2 px-3" onclick="window.bukaProfilKategori('BPD', 'BPD')">
+                  <i class="bi bi-building-check me-2"></i> Profil BPD Desa
+                </button>
+                <button type="button" class="btn btn-outline-primary text-start fw-bold rounded-3 py-2 px-3" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'RT / RW')">
+                  <i class="bi bi-diagram-3-fill me-2"></i> Lembaga Kemasyarakatan
+                </button>
+                <button type="button" class="btn btn-outline-primary text-start fw-bold rounded-3 py-2 px-3" onclick="window.bukaHalamanPublik('hukum')">
+                  <i class="bi bi-journal-bookmark-fill me-2"></i> Produk Hukum & Regulasi
+                </button>
+                <button type="button" class="btn btn-outline-success text-start fw-bold rounded-3 py-2 px-3" onclick="window.bukaHalamanPublik('ceksurat')">
+                  <i class="bi bi-patch-check-fill me-2"></i> Cek Keaslian Surat RT
+                </button>
+              </div>
+
+              <div class="p-3 bg-light rounded-4 border mt-auto">
+                <h6 class="fw-bold text-dark mb-2" style="font-size: 13px;"><i class="bi bi-clock-history text-primary me-1"></i> Informasi Pelayanan Desa</h6>
+                <p class="small text-muted mb-1" id="tampil-jam-operasional">Senin - Jumat: 08.00 - 15.00 WIB</p>
+                <p class="small text-muted mb-0" id="tampil-alamat-kantor">Desa Jambudipa, Kec. Warungkondang, Kab. Cianjur</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- SECTION 2: INFOGRAFIS DATA DESA                           -->
+      <!-- ========================================================= -->
+      <section id="sec-infografis" class="publik-section" style="display: none;">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+          <div>
+            <h4 class="fw-bold text-dark mb-1"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i> Infografis & Statistik Data Desa Jambudipa</h4>
+            <p class="text-muted small mb-0">Data tersinkronisasi secara otomatis dari Database Kependudukan dan Laporan Bulanan RT/RW.</p>
+          </div>
+          <span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-arrow-repeat me-1"></i> Otomatis Sinkron Real-Time</span>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="row g-3">
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-box" style="background: linear-gradient(135deg, #0d6efd, #0b5ed7);">
+                  <small class="text-uppercase fw-semibold" style="opacity: 0.85; font-size: 11px;">Penduduk Laki-Laki</small>
+                  <h3 class="fw-bold my-2" id="statLaki">0</h3>
+                  <div style="opacity: 0.4; font-size: 24px;"><i class="bi bi-gender-male"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-box" style="background: linear-gradient(135deg, #d63384, #b02a37);">
+                  <small class="text-uppercase fw-semibold" style="opacity: 0.85; font-size: 11px;">Penduduk Perempuan</small>
+                  <h3 class="fw-bold my-2" id="statPerempuan">0</h3>
+                  <div style="opacity: 0.4; font-size: 24px;"><i class="bi bi-gender-female"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-box" style="background: linear-gradient(135deg, #198754, #157347);">
+                  <small class="text-uppercase fw-semibold" style="opacity: 0.85; font-size: 11px;">Total Penduduk</small>
+                  <h3 class="fw-bold my-2" id="statTotalPenduduk">0</h3>
+                  <div style="opacity: 0.4; font-size: 24px;"><i class="bi bi-people-fill"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-box" style="background: linear-gradient(135deg, #6f42c1, #563d7c);">
+                  <small class="text-uppercase fw-semibold" style="opacity: 0.85; font-size: 11px;">Total Kepala Keluarga</small>
+                  <h3 class="fw-bold my-2" id="statKK">0</h3>
+                  <div style="opacity: 0.4; font-size: 24px;"><i class="bi bi-person-badge-fill"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-box" style="background: linear-gradient(135deg, #fd7e14, #d9534f);">
+                  <small class="text-uppercase fw-semibold" style="opacity: 0.85; font-size: 11px;">KK Perempuan</small>
+                  <h3 class="fw-bold my-2" id="statJanda">0</h3>
+                  <div style="opacity: 0.4; font-size: 24px;"><i class="bi bi-house-heart"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-box" style="background: linear-gradient(135deg, #495057, #212529);">
+                  <small class="text-uppercase fw-semibold" style="opacity: 0.85; font-size: 11px;">Penduduk Tidak Tetap</small>
+                  <h3 class="fw-bold my-2" id="statTidakTetap">0</h3>
+                  <div style="opacity: 0.4; font-size: 24px;"><i class="bi bi-house-slash"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-dark mt-4 mb-3"><i class="bi bi-building me-2 text-info"></i> Infrastruktur & Sarana Wilayah</h5>
+            <div class="row g-3">
+              <div class="col-4 col-md-2"><div class="infra-card"><i class="bi bi-house-fill fs-4 text-info"></i><div class="val" id="infRumah">0</div><div class="lbl">Rumah</div></div></div>
+              <div class="col-4 col-md-2"><div class="infra-card"><i class="bi bi-moon-stars-fill fs-4 text-info"></i><div class="val" id="infMasjid">0</div><div class="lbl">Masjid</div></div></div>
+              <div class="col-4 col-md-2"><div class="infra-card"><i class="bi bi-shop fs-4 text-info"></i><div class="val" id="infToko">0</div><div class="lbl">Toko</div></div></div>
+              <div class="col-4 col-md-2"><div class="infra-card"><i class="bi bi-capsule fs-4 text-info"></i><div class="val" id="infApotek">0</div><div class="lbl">Apotek</div></div></div>
+              <div class="col-4 col-md-2"><div class="infra-card"><i class="bi bi-hospital fs-4 text-info"></i><div class="val" id="infKlinik">0</div><div class="lbl">Klinik</div></div></div>
+              <div class="col-4 col-md-2"><div class="infra-card"><i class="bi bi-heart-pulse-fill fs-4 text-info"></i><div class="val" id="infBidan">0</div><div class="lbl">Bidan</div></div></div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-4">
+              <h6 class="fw-bold text-primary mb-3"><i class="bi bi-pie-chart-fill me-1"></i> Grafik Demografi Warga</h6>
+              <div class="p-2 border rounded-3 bg-light mb-3">
+                <small class="fw-bold text-muted d-block text-center mb-2" style="font-size: 0.7rem;">1. PERSENTASE LAKI-LAKI & PEREMPUAN</small>
+                <div style="position: relative; height: 150px; width: 100%; display:flex; justify-content:center;"><canvas id="chartGenderPublik"></canvas></div>
+              </div>
+              <div class="p-2 border rounded-3 bg-light">
+                <small class="fw-bold text-muted d-block text-center mb-2" style="font-size: 0.7rem;">2. DISTRIBUSI KELOMPOK UMUR</small>
+                <div style="position: relative; height: 170px; width: 100%;"><canvas id="chartUmurPublik"></canvas></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- SECTION 3: KERANGKA PROFIL DESA (SIAP DIISI ADMIN CMS)    -->
+      <!-- ========================================================= -->
+      <section id="sec-profil" class="publik-section" style="display: none;">
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+          <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+            <div>
+              <span class="badge bg-primary mb-2 px-3 py-1 rounded-pill" id="badge-kategori-profil">PROFIL DESA JAMBUDIPA</span>
+              <h4 class="fw-bold text-dark mb-1" id="judul-halaman-profil">Pemerintahan Desa Jambudipa</h4>
+              <p class="text-muted small mb-0" id="deskripsi-kategori-profil">Susunan struktur organisasi, pejabat, dan tupoksi penyelenggara pemerintahan desa.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-semibold px-3" onclick="window.bukaProfilKategori('Pemerintahan Desa', 'Pemerintahan Desa')">Pemerintahan Desa</button>
+              <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-semibold px-3" onclick="window.bukaProfilKategori('BPD', 'BPD')">BPD</button>
+              <button type="button" class="btn btn-sm btn-outline-info rounded-pill fw-semibold px-3" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'RT / RW')">RT / RW</button>
+              <button type="button" class="btn btn-sm btn-outline-info rounded-pill fw-semibold px-3" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'TP-PKK')">TP-PKK</button>
+              <button type="button" class="btn btn-sm btn-outline-info rounded-pill fw-semibold px-3" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'LPM')">LPM</button>
+              <button type="button" class="btn btn-sm btn-outline-info rounded-pill fw-semibold px-3" onclick="window.bukaProfilKategori('Lembaga Kemasyarakatan', 'SATLINMAS')">SATLINMAS</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3" id="grid-kartu-profil"></div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- SECTION 4: PRODUK HUKUM DESA (JDIH)                       -->
+      <!-- ========================================================= -->
+      <section id="sec-hukum" class="publik-section" style="display: none;">
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+              <h4 class="fw-bold text-dark mb-1"><i class="bi bi-journal-bookmark-fill text-primary me-2"></i> Produk Hukum & Regulasi Desa (JDIH)</h4>
+              <p class="text-muted small mb-0">Daftar Peraturan Desa (Perdes), Peraturan Kepala Desa (Perkades), SK, dan Dokumen Resmi Desa Jambudipa.</p>
+            </div>
+            <div style="min-width: 260px;">
+              <input type="text" id="cari-dokumen-hukum" class="form-control rounded-pill" placeholder="🔍 Cari judul atau nomor peraturan..." oninput="window.renderDaftarHukumPublik()">
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3" id="list-dokumen-hukum"></div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- SECTION 5: CEK KEASLIAN SURAT PENGANTAR RT                -->
+      <!-- ========================================================= -->
+      <section id="sec-ceksurat" class="publik-section" style="display: none;">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+              <div class="text-center mb-4">
+                <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                  <i class="bi bi-patch-check-fill fs-2"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Cek Keaslian Surat Pengantar RT</h4>
+                <p class="text-muted small">Masukkan Nomor Surat Lengkap atau NIK Warga untuk memverifikasi keaslian dokumen surat pengantar desa.</p>
+              </div>
+
+              <div class="input-group mb-3 shadow-sm rounded-pill overflow-hidden border">
+                <input type="text" id="input-kode-surat-publik" class="form-control border-0 py-3 px-4" placeholder="Contoh: 470 / 0001 / RT.002-RW.007 atau NIK Warga...">
+                <button class="btn btn-primary px-4 fw-bold" type="button" onclick="jalankanCekSuratPublik()">
+                  <i class="bi bi-search me-1"></i> Periksa Surat
+                </button>
+              </div>
+
+              <!-- Hasil Pencarian Surat -->
+              <div id="hasil-cek-surat-publik" class="mt-4"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    var dataWebsite = { umum: {}, profil: [], hukum: [], galeri: [], statistik: {} };
+    var chartGenderInstance = null;
+    var chartUmurInstance = null;
+
+    var infoKerangkaProfil = {
+      'Pemerintahan Desa': 'Struktur Organisasi dan Tata Kerja (SOTK) Pemerintah Desa Jambudipa beserta jajaran Perangkat Desa.',
+      'BPD': 'Badan Permusyawaratan Desa (BPD) sebagai lembaga perwujudan demokrasi dalam penyelenggaraan pemerintahan desa.',
+      'RT / RW': 'Data kepengurusan Rukun Tetangga (RT) dan Rukun Warga (RW) sebagai mitra pelayanan warga Desa Jambudipa.',
+      'TP-PKK': 'Tim Penggerak Pemberdayaan dan Kesejahteraan Keluarga (TP-PKK) Desa Jambudipa.',
+      'LPM': 'Lembaga Pemberdayaan Masyarakat (LPM) mitra Pemerintah Desa dalam perencanaan dan pelaksanaan pembangunan.',
+      'SATLINMAS': 'Satuan Perlindungan Masyarakat (Satlinmas) penjaga ketertiban, keamanan, dan ketenteraman lingkungan desa.'
+    };
+
+    window.toggleMobileSidebar = function() {
+      document.getElementById('sidebarPortal').classList.toggle('show-sidebar');
+      document.getElementById('sidebarBackdrop').classList.toggle('show-backdrop');
+    };
+
+    window.tutupSidebarJikaMobile = function() {
+      if (window.innerWidth < 992) {
+        document.getElementById('sidebarPortal').classList.remove('show-sidebar');
+        document.getElementById('sidebarBackdrop').classList.remove('show-backdrop');
+      }
+    };
+
+    window.toggleCollapseMenu = function(targetId, iconId) {
+      var el = document.getElementById(targetId);
+      var ic = document.getElementById(iconId);
+      if (!el) return;
+      el.classList.toggle('show');
+      if (ic) {
+        if (el.classList.contains('show')) {
+          ic.classList.replace('bi-chevron-right', 'bi-chevron-down');
+        } else {
+          ic.classList.replace('bi-chevron-down', 'bi-chevron-right');
+        }
+      }
+    };
+
+    window.bukaHalamanPublik = function(namaSection) {
+      var sections = document.querySelectorAll('.publik-section');
+      for (var i = 0; i < sections.length; i++) {
+        sections[i].style.display = 'none';
+      }
+
+      var navLinks = document.querySelectorAll('.sidebar-menu .nav-item-link');
+      for (var j = 0; j < navLinks.length; j++) {
+        navLinks[j].classList.remove('active');
+      }
+
+      var subLinks = document.querySelectorAll('.submenu-list .sub-link');
+      for (var k = 0; k < subLinks.length; k++) {
+        subLinks[k].classList.remove('active-sub');
+      }
+
+      var target = document.getElementById('sec-' + namaSection);
+      if (target) target.style.display = 'block';
+
+      var navBtn = document.getElementById('nav-' + namaSection);
+      if (navBtn) navBtn.classList.add('active');
+
+      if (namaSection === 'infografis' && dataWebsite.statistik) {
+        setTimeout(function() {
+          window.terapkanStatistikDesa(dataWebsite.statistik);
+        }, 120);
+      }
+
+      window.tutupSidebarJikaMobile();
+      window.scrollTo(0, 0);
+    };
+
+    window.renderSlideKegiatanDesa = function(listGaleri) {
+      var container = document.getElementById('wadah-slide-kegiatan');
+      if (!container) return;
+
+      var daftar = (listGaleri && listGaleri.length > 0) ? listGaleri : [
+        {
+          judul: 'Pelayanan & Musyawarah Masyarakat Desa Jambudipa',
+          tanggal: 'Kegiatan Pemerintahan Desa',
+          keterangan: 'Pemerintah Desa Jambudipa bersama lembaga desa senantiasa bersinergi meningkatkan pelayanan publik, pembangunan infrastruktur wilayah, serta pemberdayaan warga secara berkelanjutan.',
+          foto: 'https://lh3.googleusercontent.com/d/1gBDmjZAhAKRQbbETV5Ktj91MZ6p231nr'
+        }
+      ];
+
+      var html = '';
+      for (var i = 0; i < daftar.length; i++) {
+        var item = daftar[i];
+        var activeClass = (i === 0) ? 'active' : '';
+        var fotoUrl = item.foto || 'https://lh3.googleusercontent.com/d/1gBDmjZAhAKRQbbETV5Ktj91MZ6p231nr';
+        html += '<div class="carousel-item ' + activeClass + '">' +
+                  '<div class="medsos-img-box">' +
+                    '<img src="' + fotoUrl + '" alt="Kegiatan Desa" onerror="this.src=\'https://lh3.googleusercontent.com/d/1gBDmjZAhAKRQbbETV5Ktj91MZ6p231nr\'">' +
+                  '</div>' +
+                  '<div class="medsos-caption-box">' +
+                    '<div class="d-flex justify-content-between align-items-center mb-1">' +
+                      '<span class="badge bg-info text-dark fw-bold" style="font-size: 11px;">' + (item.tanggal || 'Info Kegiatan Desa') + '</span>' +
+                      '<small class="text-muted fw-semibold">Slide ' + (i + 1) + ' dari ' + daftar.length + '</small>' +
+                    '</div>' +
+                    '<h5 class="fw-bold text-dark mb-1 mt-1">' + (item.judul || 'Kegiatan Pemerintah Desa Jambudipa') + '</h5>' +
+                    '<p class="text-secondary mb-0" style="font-size: 14px; line-height: 1.6;">' + (item.keterangan || '') + '</p>' +
+                  '</div>' +
+                '</div>';
+      }
+      container.innerHTML = html;
+    };
+
+    window.bangunSubmenuLembagaDinamis = function(listProfil) {
+      var standarLKD = ['RT / RW', 'TP-PKK', 'LPM', 'SATLINMAS'];
+      for (var i = 0; i < listProfil.length; i++) {
+        var p = listProfil[i];
+        if (p.kategori === 'Lembaga Kemasyarakatan' && p.subLembaga) {
+          var namaBersih = String(p.subLembaga).trim();
+          var sudahAda = false;
+          for (var j = 0; j < standarLKD.length; j++) {
+            if (standarLKD[j].toLowerCase() === namaBersih.toLowerCase()) {
+              sudahAda = true;
+              break;
+            }
+          }
+          if (!sudahAda) standarLKD.push(namaBersih);
+        }
+      }
+
+      var container = document.getElementById('daftar-submenu-lkd');
+      if (!container) return;
+      var html = '';
+      for (var k = 0; k < standarLKD.length; k++) {
+        var namaLembaga = standarLKD[k];
+        var safeLembaga = namaLembaga.replace(/'/g, "\\'");
+        html += '<li><div class="sub-link" onclick="window.bukaProfilKategori(\'Lembaga Kemasyarakatan\', \'' + safeLembaga + '\', this)">• ' + namaLembaga + '</div></li>';
+      }
+      container.innerHTML = html;
+    };
+
+    window.bukaProfilKategori = function(kategoriUtama, subLembaga, clickedEl) {
+      window.bukaHalamanPublik('profil');
+
+      if (clickedEl) {
+        clickedEl.classList.add('active-sub');
+      }
+
+      document.getElementById('badge-kategori-profil').innerText = kategoriUtama.toUpperCase();
+      document.getElementById('judul-halaman-profil').innerText = (kategoriUtama === 'Lembaga Kemasyarakatan')
+        ? (subLembaga + ' - Desa Jambudipa')
+        : (kategoriUtama + ' Jambudipa');
+
+      var ketProfil = infoKerangkaProfil[subLembaga] || infoKerangkaProfil[kategoriUtama] || 'Daftar pengurus dan struktur organisasi lembaga Desa Jambudipa.';
+      document.getElementById('deskripsi-kategori-profil').innerText = ketProfil;
+
+      var semuaProfil = dataWebsite.profil || [];
+      var hasilFilter = [];
+
+      for (var i = 0; i < semuaProfil.length; i++) {
+        var x = semuaProfil[i];
+        if (kategoriUtama === 'Pemerintahan Desa' || kategoriUtama === 'BPD') {
+          if (x.kategori === kategoriUtama) hasilFilter.push(x);
+        } else {
+          if (x.kategori === 'Lembaga Kemasyarakatan' && String(x.subLembaga || '').toLowerCase() === subLembaga.toLowerCase()) {
+            hasilFilter.push(x);
+          }
+        }
+      }
+
+      var grid = document.getElementById('grid-kartu-profil');
+      var avatarDefault = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+
+      if (hasilFilter.length === 0) {
+        grid.innerHTML =
+          '<div class="col-12 col-md-4">' +
+            '<div class="card-pengurus p-4 text-center d-flex flex-column align-items-center opacity-75" style="border-style: dashed;">' +
+              '<img src="' + avatarDefault + '" class="avatar-pengurus mb-3">' +
+              '<span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-3 py-1 rounded-pill mb-2">Ketua / Pimpinan</span>' +
+              '<h6 class="fw-bold text-dark mb-1">Menunggu Input Admin</h6>' +
+              '<small class="text-muted">' + subLembaga + '</small>' +
+            '</div>' +
+          '</div>' +
+          '<div class="col-12 col-md-4">' +
+            '<div class="card-pengurus p-4 text-center d-flex flex-column align-items-center opacity-75" style="border-style: dashed;">' +
+              '<img src="' + avatarDefault + '" class="avatar-pengurus mb-3">' +
+              '<span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-3 py-1 rounded-pill mb-2">Sekretaris</span>' +
+              '<h6 class="fw-bold text-dark mb-1">Menunggu Input Admin</h6>' +
+              '<small class="text-muted">' + subLembaga + '</small>' +
+            '</div>' +
+          '</div>' +
+          '<div class="col-12 col-md-4">' +
+            '<div class="card-pengurus p-4 text-center d-flex flex-column align-items-center opacity-75" style="border-style: dashed;">' +
+              '<img src="' + avatarDefault + '" class="avatar-pengurus mb-3">' +
+              '<span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-3 py-1 rounded-pill mb-2">Anggota / Pengurus</span>' +
+              '<h6 class="fw-bold text-dark mb-1">Menunggu Input Admin</h6>' +
+              '<small class="text-muted">' + subLembaga + '</small>' +
+            '</div>' +
+          '</div>';
+        return;
+      }
+
+      var html = '';
+      for (var m = 0; m < hasilFilter.length; m++) {
+        var item = hasilFilter[m];
+        var foto = item.foto ? item.foto : avatarDefault;
+        html +=
+          '<div class="col-12 col-sm-6 col-lg-4">' +
+            '<div class="card-pengurus p-4 text-center d-flex flex-column align-items-center">' +
+              '<img src="' + foto + '" class="avatar-pengurus mb-3 shadow-sm" onerror="this.src=\'' + avatarDefault + '\'">' +
+              '<span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-3 py-1 rounded-pill mb-2">' + item.jabatan + '</span>' +
+              '<h5 class="fw-bold text-dark mb-1">' + item.nama + '</h5>' +
+              '<small class="text-muted fw-semibold mb-2">' + item.subLembaga + '</small>' +
+              '<p class="text-secondary small mb-0 mt-1">' + (item.deskripsi || '') + '</p>' +
+            '</div>' +
+          '</div>';
+      }
+      grid.innerHTML = html;
+    };
+
+    window.renderDaftarHukumPublik = function() {
+      var container = document.getElementById('list-dokumen-hukum');
+      if (!container) return;
+      var inputCari = document.getElementById('cari-dokumen-hukum');
+      var q = (inputCari ? inputCari.value : '').toLowerCase();
+      var semuaHukum = dataWebsite.hukum || [];
+      var list = [];
+
+      for (var i = 0; i < semuaHukum.length; i++) {
+        var d = semuaHukum[i];
+        if (!q || String(d.judul || '').toLowerCase().indexOf(q) !== -1 || String(d.nomor || '').toLowerCase().indexOf(q) !== -1 || String(d.jenis || '').toLowerCase().indexOf(q) !== -1) {
+          list.push(d);
+        }
+      }
+
+      if (list.length === 0) {
+        container.innerHTML =
+          '<div class="col-12">' +
+            '<div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">' +
+              '<i class="bi bi-journal-bookmark fs-1 text-primary mb-2"></i>' +
+              '<h6 class="fw-bold text-dark">Belum Ada Dokumen Produk Hukum</h6>' +
+              '<p class="text-muted small mb-0">Dokumen Perdes, Perkades, atau SK Kepala Desa akan tampil di halaman ini setelah diunggah oleh Admin.</p>' +
+            '</div>' +
+          '</div>';
+        return;
+      }
+
+      var html = '';
+      for (var j = 0; j < list.length; j++) {
+        var doc = list[j];
+        html +=
+          '<div class="col-12 col-md-6">' +
+            '<div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between">' +
+              '<div>' +
+                '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                  '<span class="badge bg-primary">' + doc.jenis + '</span>' +
+                  '<small class="text-muted fw-semibold"><i class="bi bi-calendar3 me-1"></i>' + doc.nomor + '</small>' +
+                '</div>' +
+                '<h6 class="fw-bold text-dark mb-2">' + doc.judul + '</h6>' +
+                '<p class="text-muted small mb-3">' + (doc.ringkasan || '-') + '</p>' +
+              '</div>' +
+              '<div class="border-top pt-3 text-end">' +
+                '<a href="' + doc.link + '" target="_blank" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-4">' +
+                  '<i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i> Lihat / Unduh Dokumen' +
+                '</a>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }
+      container.innerHTML = html;
+    };
+
+    window.terapkanStatistikDesa = function(res) {
+      if (!res) return;
+      document.getElementById('statLaki').innerText = (res.laki || 0).toLocaleString('id-ID');
+      document.getElementById('statPerempuan').innerText = (res.perempuan || 0).toLocaleString('id-ID');
+      document.getElementById('statTotalPenduduk').innerText = (res.totalPenduduk || 0).toLocaleString('id-ID');
+      document.getElementById('statKK').innerText = (res.kk || 0).toLocaleString('id-ID');
+      document.getElementById('statJanda').innerText = (res.janda || 0).toLocaleString('id-ID');
+      document.getElementById('statTidakTetap').innerText = (res.tidakTetap || 0).toLocaleString('id-ID');
+
+      document.getElementById('infRumah').innerText = (res.rumah || 0).toLocaleString('id-ID');
+      document.getElementById('infMasjid').innerText = (res.masjid || 0).toLocaleString('id-ID');
+      document.getElementById('infToko').innerText = (res.toko || 0).toLocaleString('id-ID');
+      document.getElementById('infApotek').innerText = (res.apotek || 0).toLocaleString('id-ID');
+      document.getElementById('infKlinik').innerText = (res.klinik || 0).toLocaleString('id-ID');
+      document.getElementById('infBidan').innerText = (res.bidan || 0).toLocaleString('id-ID');
+
+      var ctxG = document.getElementById("chartGenderPublik");
+      if (ctxG && typeof Chart !== "undefined") {
+        if (chartGenderInstance) chartGenderInstance.destroy();
+        chartGenderInstance = new Chart(ctxG, {
+          type: "pie",
+          data: {
+            labels: ["Laki-Laki", "Perempuan"],
+            datasets: [{ data: [res.laki || 0, res.perempuan || 0], backgroundColor: ["#0284c7", "#db2777"], borderWidth: 1 }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { font: { size: 10 } } } } }
+        });
+      }
+
+      var ctxU = document.getElementById("chartUmurPublik");
+      if (ctxU && typeof Chart !== "undefined") {
+        if (chartUmurInstance) chartUmurInstance.destroy();
+        var umurData = res.kelompokUmur || [0, 0, 0, 0];
+        chartUmurInstance = new Chart(ctxU, {
+          type: "bar",
+          data: {
+            labels: ["0-14 Thn", "15-29 Thn", "30-59 Thn", "60+ Thn"],
+            datasets: [{ data: umurData, backgroundColor: "rgba(13, 110, 253, 0.85)", borderWidth: 1, borderRadius: 4 }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { font: { size: 9 } } }, y: { ticks: { font: { size: 9 } } } } }
+        });
+      }
+    };
+
+    window.muatSeluruhDataWebsite = function() {
+      window.renderSlideKegiatanDesa([]);
+      window.renderDaftarHukumPublik();
+
+      if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res) return;
+          dataWebsite = res;
+
+          var u = res.umum || {};
+          if (u.sambutan_judul) document.getElementById('tampil-judul-sambutan').innerText = u.sambutan_judul;
+          if (u.jam_operasional) document.getElementById('tampil-jam-operasional').innerText = u.jam_operasional;
+          if (u.alamat_kantor) document.getElementById('tampil-alamat-kantor').innerText = u.alamat_kantor;
+
+          window.renderSlideKegiatanDesa(res.galeri || []);
+          window.bangunSubmenuLembagaDinamis(res.profil || []);
+          if (res.statistik) {
+            window.terapkanStatistikDesa(res.statistik);
+          }
+          window.renderDaftarHukumPublik();
+        })
+        .ambilSemuaDataCMSWebsiteDesa();
+    };
+
+    window.jalankanCekSuratPublik = function() {
+      var keyword = document.getElementById('input-kode-surat-publik').value.trim();
+      var boxHasil = document.getElementById('hasil-cek-surat-publik');
+
+      if (!keyword) {
+        boxHasil.innerHTML = '<div class="alert alert-warning rounded-3 small">Silakan masukkan Nomor Surat atau NIK terlebih dahulu!</div>';
+        return;
+      }
+
+      boxHasil.innerHTML = '<div class="text-center py-3 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>Memeriksa arsip digital desa...</div>';
+
+      if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        boxHasil.innerHTML = '<div class="alert alert-danger rounded-3 small">Environment Google Apps Script tidak terdeteksi.</div>';
+        return;
+      }
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.ditemukan) {
+            boxHasil.innerHTML = `
+              <div class="alert alert-success border-0 rounded-4 p-4 shadow-sm" style="background-color: #f0fdf4;">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                  <div>
+                    <h6 class="fw-bold text-success mb-0">SURAT DINYATAKAN ASLI & TERDAFTAR</h6>
+                    <small class="text-muted">Dokumen tercatat resmi di arsip Desa Jambudipa</small>
+                  </div>
+                </div>
+                <hr class="border-success opacity-25">
+                <table class="table table-sm table-borderless small mb-3">
+                  <tr><td class="text-muted" style="width: 140px;">Nomor Surat</td><td class="fw-bold text-dark">: ${res.noSurat}</td></tr>
+                  <tr><td class="text-muted">Tanggal Cetak</td><td class="fw-bold text-dark">: ${res.tanggal}</td></tr>
+                  <tr><td class="text-muted">Nama Warga</td><td class="fw-bold text-dark">: ${res.nama}</td></tr>
+                  <tr><td class="text-muted">Keperluan</td><td class="fw-bold text-dark">: ${res.keperluan}</td></tr>
+                  <tr><td class="text-muted">Wilayah RT / RW</td><td class="fw-bold text-dark">: RT ${res.rt} / RW ${res.rw}</td></tr>
+                  <tr><td class="text-muted">Status Dokumen</td><td><span class="badge bg-success">${res.status}</span></td></tr>
+                </table>
+                <div class="text-end">
+                  <a href="${res.linkPdf}" target="_blank" class="btn btn-sm btn-success fw-bold rounded-pill px-4">
+                    <i class="bi bi-file-earmark-pdf-fill me-1"></i> Buka Dokumen PDF Asli
+                  </a>
+                </div>
+              </div>`;
+          } else {
+            boxHasil.innerHTML = `
+              <div class="alert alert-danger border-0 rounded-4 p-4 shadow-sm" style="background-color: #fef2f2;">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-x-circle-fill text-danger fs-4"></i>
+                  <div>
+                    <h6 class="fw-bold text-danger mb-0">SURAT TIDAK DITEMUKAN / PALSU</h6>
+                    <small class="text-muted">Nomor surat atau NIK yang Anda masukkan tidak terdaftar di database arsip desa.</small>
+                  </div>
+                </div>
+              </div>`;
+          }
+        })
+        .withFailureHandler(function(err) {
+          boxHasil.innerHTML = '<div class="alert alert-danger rounded-3 small">Terjadi kesalahan sistem: ' + err.message + '</div>';
+        })
+        .verifikasiSuratPublik(keyword);
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+      window.muatSeluruhDataWebsite();
+    });
+  </script>
+</body>
+</html>
